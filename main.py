@@ -54,6 +54,9 @@ def update_user(id: int, user: schemas.User, session: Session = Depends(get_sess
 
     # get the user item with the given id
     user_db = session.query(models.User).get(id)
+    # check if user item with given id exists. If not, raise exception and return 404 not found response
+    if not user_db:
+        raise HTTPException(status_code=404, detail=f"user item with id {id} not found")
     user_data = user.dict(exclude_unset=True)
     user_data.pop('id')
 
@@ -62,10 +65,6 @@ def update_user(id: int, user: schemas.User, session: Session = Depends(get_sess
         session.add(user_db)
         session.commit()
         session.refresh(user_db)
-
-    # check if user item with given id exists. If not, raise exception and return 404 not found response
-    if not user:
-        raise HTTPException(status_code=404, detail=f"user item with id {id} not found")
 
     return user
 
