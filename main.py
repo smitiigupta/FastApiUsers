@@ -50,15 +50,18 @@ def read_user(id: int, session: Session = Depends(get_session)):
     return user
 
 @app.put("/user/{id}", response_model=schemas.User)
-def update_user(id: int, name: str, session: Session = Depends(get_session)):
+def update_user(id: int, user: schemas.User, session: Session = Depends(get_session)):
 
     # get the user item with the given id
-    user = session.query(models.User).get(id)
+    user_db = session.query(models.User).get(id)
+    user_data = user.dict(exclude_unset=True)
+    user_data.pop('id')
 
-    # update user item with the given task (if an item with the given id was found)
-    if user:
-        user.name = name
+    for key, value in user_data.items():
+        setattr(user_db, key, value)
+        session.add(user_db)
         session.commit()
+        session.refresh(user_db)
 
     # check if user item with given id exists. If not, raise exception and return 404 not found response
     if not user:
