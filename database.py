@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Create a sqlite engine instance
-engine = create_engine('postgresql+psycopg2://postgres:postgres@localhost/fastapi_users')
+engine = create_engine('postgresql+psycopg2://postgres:postgres@localhost/fastapiusers')
 
 # Create a DeclarativeMeta instance
 Base = declarative_base()

@@ -27,7 +27,7 @@ def root():
 def create_user(user: schemas.UserCreate, session: Session = Depends(get_session)):
 
     # create an instance of the User database model
-    userdb = models.User(name = user.name)
+    userdb = models.User(name=user.name, age=user.age, gender=user.gender, address=user.address)
 
     # add it to the session and commit it
     session.add(userdb)
